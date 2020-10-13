@@ -9,7 +9,11 @@ namespace zxGameMath
     {
         private static VerletManager _instance;
 
-        public static VerletManager Instance => _instance;
+        public static VerletManager Instance {
+			get{
+				return _instance;
+			}
+		}
 
         #region 预设
 

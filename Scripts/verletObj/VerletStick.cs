@@ -9,22 +9,28 @@ namespace zxGameMath.verletObj
     public class VerletStick : VerletObj
     {
         // 质子
-        private Int32 particleNum = 3;
+        private Int32 particleNum = 4;
         private Single distanceBetweenTwoParticle = 1f;
         
         // 棍子
 
         public VerletStick(Vector3 stickPosition)
         {
+            
             // 两个质点 + 连接的棍子
-            Particles.Add(new VParticle(stickPosition));
+            for (Int32 i = 0; i < particleNum; i++) {
+                Particles.Add(new VParticle(stickPosition));
+            }
+            
+            // Particles.Add(new VParticle(stickPosition));
             // Particles.Add(new VParticle(stickPosition + new Vector3(0, -distanceBetweenTwoParticle, 0)));
-            Particles.Add(new VParticle(stickPosition + new Vector3(distanceBetweenTwoParticle, -distanceBetweenTwoParticle, distanceBetweenTwoParticle)));
+            // Particles.Add(new VParticle(stickPosition + new Vector3(distanceBetweenTwoParticle, -distanceBetweenTwoParticle, distanceBetweenTwoParticle)));
             // Particles.Add(new VParticle(stickPosition + new Vector3(distanceBetweenTwoParticle, distanceBetweenTwoParticle)));
 
             for (Int32 i = 0; i < Particles.Count; i++) {
                 ShowParticles.Add(GameObject.Instantiate(VerletManager.Instance.particleObj));
             }
+            
         }
 
         // 计算两个棍子之间的距离
@@ -60,9 +66,9 @@ namespace zxGameMath.verletObj
         public override void SolveConstrain()
         {
             SloveDistance(Particles[0], Particles[1]);
-            // SloveDistance(Particles[1], Particles[2]);
-            // SloveDistance(Particles[2], Particles[3]);
-            // SloveDistance(Particles[3], Particles[0]);
+            SloveDistance(Particles[1], Particles[2]);
+            SloveDistance(Particles[2], Particles[3]);
+            SloveDistance(Particles[0], Particles[3]);
         }
     }
 }

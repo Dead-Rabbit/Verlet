@@ -18,6 +18,9 @@ namespace zxGameMath.verletObj
         
         // 显示质点
         public List<GameObject> ShowParticles = new List<GameObject>();
+        
+        // 显示棍棒
+        public List<LineRenderer> Sticks = new List<LineRenderer>();
 
         #endregion
 

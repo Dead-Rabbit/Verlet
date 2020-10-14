@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using zxGameMath.verletObj;
@@ -19,6 +18,7 @@ namespace zxGameMath
 
         public GameObject particleObj;    // 质点物体
         public GameObject stickObj;       // 棍状物体
+        public Material stickMaterial;    // 棍子的材质
 
         #endregion
         

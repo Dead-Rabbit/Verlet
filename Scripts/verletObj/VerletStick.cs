@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace zxGameMath.verletObj
@@ -8,29 +9,50 @@ namespace zxGameMath.verletObj
     /// </summary>
     public class VerletStick : VerletObj
     {
+
+        private GameObject verletStickObj;
+        
         // 质子
-        private Int32 particleNum = 4;
         private Single distanceBetweenTwoParticle = 1f;
         
         // 棍子
+        private LineRenderer stickRender;
 
         public VerletStick(Vector3 stickPosition)
         {
+            verletStickObj = new GameObject("棍子");
             
             // 两个质点 + 连接的棍子
-            for (Int32 i = 0; i < particleNum; i++) {
-                Particles.Add(new VParticle(stickPosition));
+            for (Int32 i = 0; i < 2; i++)
+            {
+                Vector3 pos = stickPosition + i * 0.1f * new Vector3(1, 1, 1);
+                Particles.Add(new VParticle(pos));
+                
+                GameObject showParticleObj = GameObject.Instantiate(VerletManager.Instance.particleObj, verletStickObj.transform);
+                showParticleObj.transform.localPosition = pos;
+                ShowParticles.Add(showParticleObj);
             }
             
-            // Particles.Add(new VParticle(stickPosition));
-            // Particles.Add(new VParticle(stickPosition + new Vector3(0, -distanceBetweenTwoParticle, 0)));
-            // Particles.Add(new VParticle(stickPosition + new Vector3(distanceBetweenTwoParticle, -distanceBetweenTwoParticle, distanceBetweenTwoParticle)));
-            // Particles.Add(new VParticle(stickPosition + new Vector3(distanceBetweenTwoParticle, distanceBetweenTwoParticle)));
+            stickRender = verletStickObj.AddComponent<LineRenderer>();
+            stickRender.material = VerletManager.Instance.stickMaterial;
+            stickRender.startWidth = 0.1f;
+            stickRender.endWidth = 0.1f;
+            stickRender.startColor = Color.red;
+            stickRender.endColor = Color.red;
+        }
 
-            for (Int32 i = 0; i < Particles.Count; i++) {
-                ShowParticles.Add(GameObject.Instantiate(VerletManager.Instance.particleObj));
-            }
+        public override void SyncVerletParticles()
+        {
+            // 同步质子
+            base.SyncVerletParticles();
             
+            // 同步棍子
+            List<Vector3> points = new List<Vector3>();
+            for (Int32 i = 0; i < Particles.Count; i++)
+            {
+                points.Add(ShowParticles[i].transform.position);
+            }
+            stickRender.SetPositions(points.ToArray());
         }
 
         // 计算两个棍子之间的距离
@@ -43,7 +65,6 @@ namespace zxGameMath.verletObj
                 ErrorFactor = (CurrentDistance - distanceBetweenTwoParticle) / CurrentDistance;
             }
             else {
-                delta = new Vector3(-distanceBetweenTwoParticle, -distanceBetweenTwoParticle, -distanceBetweenTwoParticle).normalized;
                 ErrorFactor = distanceBetweenTwoParticle;
             }
 
@@ -66,9 +87,6 @@ namespace zxGameMath.verletObj
         public override void SolveConstrain()
         {
             SloveDistance(Particles[0], Particles[1]);
-            SloveDistance(Particles[1], Particles[2]);
-            SloveDistance(Particles[2], Particles[3]);
-            SloveDistance(Particles[0], Particles[3]);
         }
     }
 }

@@ -1,6 +1,6 @@
 namespace zxGameMath.verletObj
 {
-    public class VerletPolygon : VerletObj
+    public class VerletHexagon : VerletObj
     {
         
     }

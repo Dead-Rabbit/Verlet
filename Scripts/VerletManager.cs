@@ -39,7 +39,10 @@ namespace zxGameMath
             // _verletObjs.Add(new VerletBall(new Vector3(0, 0, 0)));
             
             // 创建棍状
-            _verletObjs.Add(new VerletStick(new Vector3(0, 0, 0)));
+//            _verletObjs.Add(new VerletStick(new Vector3(0, 0, 0)));
+            
+            // 创建 三棱锥
+            _verletObjs.Add(new VerletHexagon(new Vector3(0, 0, 0)));
         }
 
         private void Update()

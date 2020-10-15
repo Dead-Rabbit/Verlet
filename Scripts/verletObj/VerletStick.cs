@@ -12,7 +12,7 @@ namespace zxGameMath.verletObj
 
         private GameObject verletStickObj;
         
-        // 质子
+        // 质子距离
         private Single distanceBetweenTwoParticle = 1f;
         
         // 棍子

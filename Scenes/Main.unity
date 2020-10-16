@@ -295,7 +295,7 @@ MonoBehaviour:
     type: 2}
   stickObj: {fileID: 0}
   stickMaterial: {fileID: 2100000, guid: 57fb520d8f05ecc4dbd6b0370172c802, type: 2}
-  Forcedir: {x: 0, y: -50, z: 0}
+  Forcedir: {x: 0, y: 0, z: 0}
 --- !u!1 &1753423320
 GameObject:
   m_ObjectHideFlags: 0

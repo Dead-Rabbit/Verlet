@@ -32,6 +32,8 @@ namespace zxGameMath.verletObj
                 showParticleObj.transform.localPosition = pos;
                 ShowParticles.Add(showParticleObj);
             }
+
+            Particles[0].beFree = false;
             
             stickRender = verletStickObj.AddComponent<LineRenderer>();
             stickRender.material = VerletManager.Instance.stickMaterial;

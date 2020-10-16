@@ -27,6 +27,8 @@ namespace zxGameMath
         
         // 韦尔莱物体
         List<VerletObj> _verletObjs = new List<VerletObj>();
+        // 物理韦尔莱物体
+        List<VerletPhysicObj> _verletPhysicObjs = new List<VerletPhysicObj>();
 
         private void Awake()
         {
@@ -42,12 +44,19 @@ namespace zxGameMath
 //            _verletObjs.Add(new VerletStick(new Vector3(0, 0, 0)));
             
             // 创建 三棱锥
-            _verletObjs.Add(new VerletHexagon(new Vector3(0, 0, 0)));
+            // _verletObjs.Add(new VerletHexagon(new Vector3(0, 0, 0)));
+            
+            // 创建固定位置的棍子
+            _verletPhysicObjs.Add(new VerletPhysicObj(new Vector3(0, 0, 0)));
         }
 
         private void Update()
         {
             foreach (VerletObj verletObj in _verletObjs) {
+                verletObj.Update(Time.deltaTime);
+            }
+            
+            foreach (VerletPhysicObj verletObj in _verletPhysicObjs) {
                 verletObj.Update(Time.deltaTime);
             }
         }

@@ -46,6 +46,20 @@ namespace zxGameMath.verletObj
             stickRender.endColor = Color.red;
         }
 
+        /// <summary>
+        /// 韦尔莱积分
+        /// </summary>
+        public virtual void Verlet(Single delTime)
+        {
+            foreach (VParticle particle in Particles) {
+                if (particle.beFree) {
+                    Vector3 newPosition = particle.CurPos + (particle.CurPos - particle.OldPos) + delTime * delTime * VerletManager.Instance.Forcedir;
+                    particle.OldPos = particle.CurPos;
+                    particle.CurPos = newPosition;
+                }
+            }
+        }
+
         public void SyncVerletParticles()
         {
             // 同步棍子
@@ -89,6 +103,16 @@ namespace zxGameMath.verletObj
         public void SolveConstrain()
         {
             SloveDistance(Particles[0], Particles[1]);
+        }
+        
+        /// <summary>
+        /// Unity的更新
+        /// </summary>
+        public virtual void Update(Single delTime)
+        {
+            Verlet(delTime);
+            SolveConstrain();
+            SyncVerletParticles();
         }
     }
 }

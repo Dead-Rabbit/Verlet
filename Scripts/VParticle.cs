@@ -12,6 +12,8 @@ namespace zxGameMath
         public Vector3 CurPos = Vector3.zero;
 
         public Boolean beFree = true;
+        
+        public Vector3 addForce = Vector3.zero;
 
         public VParticle()
         {

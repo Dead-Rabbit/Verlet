@@ -25,7 +25,7 @@ namespace zxGameMath.verletObj
             verletStickObj = new GameObject("棍子");
             
             // 两个质点 + 连接的棍子
-            Particles.Add(new VParticle(stickPosition));;
+            Particles.Add(new VParticle(stickPosition));
             Particles.Add(new VParticle(stickPosition + new Vector3(distanceBetweenTwoParticle, 0, 0)));
 
             Particles[0].beFree = false;
@@ -52,7 +52,8 @@ namespace zxGameMath.verletObj
         {
             foreach (VParticle particle in Particles) {
                 if (particle.beFree) {
-                    Vector3 newPosition = particle.CurPos + (particle.CurPos - particle.OldPos) + delTime * delTime * VerletManager.Instance.Forcedir;
+                    Vector3 newPosition = particle.CurPos + (particle.CurPos - particle.OldPos) + delTime * delTime * (VerletManager.Instance.Forcedir + particle.addForce);
+                    particle.addForce = Vector3.zero;
                     particle.OldPos = particle.CurPos;
                     particle.CurPos = newPosition;
                 }
@@ -115,11 +116,11 @@ namespace zxGameMath.verletObj
                 RaycastHit hit;
                 if (Physics.Raycast(particle.OldPos, particle.CurPos - particle.OldPos, out hit, (particle.CurPos - particle.OldPos).magnitude))
                 {
-//                    particle.CurPos = hit.point;
-//                    Debug.Log(hit.point);
-
                     GameObject debugSphere = GameObject.Instantiate(VerletManager.Instance.DebugSphere);
                     debugSphere.transform.position = hit.point;
+
+//                    particle.CurPos = hit.point + hit.distance * hit.normal;
+                    particle.addForce = hit.distance * 100 * 100 * hit.normal;
                 }
             }
         }

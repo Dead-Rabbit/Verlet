@@ -329,7 +329,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 543262922}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.48, z: 0}
+  m_LocalPosition: {x: 0, y: -4.54, z: 0}
   m_LocalScale: {x: 10, y: 0.5, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
@@ -381,7 +381,7 @@ MonoBehaviour:
   stickMaterial: {fileID: 2100000, guid: 57fb520d8f05ecc4dbd6b0370172c802, type: 2}
   DebugSphere: {fileID: 1034210786604738, guid: 95336af4d71430349a836361951484e9,
     type: 2}
-  Forcedir: {x: 0, y: -40, z: 0}
+  Forcedir: {x: 0, y: 0, z: 0}
   sphereRound: 4
 --- !u!1 &1753423320
 GameObject:

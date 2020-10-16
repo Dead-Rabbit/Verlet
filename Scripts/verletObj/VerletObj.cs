@@ -30,9 +30,11 @@ namespace zxGameMath.verletObj
         public virtual void Verlet(Single delTime)
         {
             foreach (VParticle particle in Particles) {
-                Vector3 newPosition = particle.CurPos + (particle.CurPos - particle.OldPos) + delTime * delTime * VerletManager.Instance.Forcedir;
-                particle.OldPos = particle.CurPos;
-                particle.CurPos = newPosition;
+                if (particle.beFree) {
+                    Vector3 newPosition = particle.CurPos + (particle.CurPos - particle.OldPos) + delTime * delTime * VerletManager.Instance.Forcedir;
+                    particle.OldPos = particle.CurPos;
+                    particle.CurPos = newPosition;
+                }
             }
         }
 

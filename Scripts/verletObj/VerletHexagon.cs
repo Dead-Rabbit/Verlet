@@ -17,17 +17,6 @@ namespace zxGameMath.verletObj
         // 棍子
         private LineRenderer stickRender;
 
-        public override void Verlet(float delTime)
-        {
-            foreach (VParticle particle in Particles) {
-                if (particle.beFree) {
-                    Vector3 newPosition = particle.CurPos + (particle.CurPos - particle.OldPos) + delTime * delTime * VerletManager.Instance.Forcedir;
-                    particle.OldPos = particle.CurPos;
-                    particle.CurPos = newPosition;
-                }
-            }
-        }
-
         public VerletHexagon(Vector3 stickPosition)
         {
             
@@ -68,6 +57,7 @@ namespace zxGameMath.verletObj
         }
         
         // 计算两个棍子之间的距离
+        // 目前仅计算了位置关系，所以会出现当弹起后看起来没有重力影响
         private void SloveDistance(VParticle particleA, VParticle particleB)
         {
             Vector3 delta = particleB.CurPos - particleA.CurPos;

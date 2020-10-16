@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using zxGameMath.verletObj;
@@ -20,10 +21,15 @@ namespace zxGameMath
         public GameObject stickObj;       // 棍状物体
         public Material stickMaterial;    // 棍子的材质
 
+        public GameObject DebugSphere;    // 调试用的圆球
+
         #endregion
         
         // 重力
         public Vector3 Forcedir = new Vector3(0, -1f, 0);
+        
+        // 范围
+        public Single sphereRound = 4;
         
         // 韦尔莱物体
         List<VerletObj> _verletObjs = new List<VerletObj>();

@@ -9,7 +9,7 @@ namespace zxGameMath.verletObj
         private GameObject verletStickObj;
         
         // 质子距离
-        private Single distanceBetweenTwoParticle = 1f;
+        private Single distanceBetweenTwoParticle = 3f;
         
         // 质点集合
         public List<VParticle> Particles = new List<VParticle>();
@@ -25,11 +25,10 @@ namespace zxGameMath.verletObj
             verletStickObj = new GameObject("棍子");
             
             // 两个质点 + 连接的棍子
-            for (Int32 i = 0; i < 2; i++)
-            {
-                Vector3 pos = stickPosition + i * 0.1f * new Vector3(1, 1, 1);
-                Particles.Add(new VParticle(pos));
-            }
+            Particles.Add(new VParticle(stickPosition));;
+            Particles.Add(new VParticle(stickPosition + new Vector3(distanceBetweenTwoParticle, 0, 0)));
+
+            Particles[0].beFree = false;
 
             // 点GameObject
             for (Int32 i = 0; i < Particles.Count; i++) {
@@ -59,18 +58,7 @@ namespace zxGameMath.verletObj
                 }
             }
         }
-
-        public void SyncVerletParticles()
-        {
-            // 同步棍子
-            List<Vector3> points = new List<Vector3>();
-            for (Int32 i = 0; i < Particles.Count; i++)
-            {
-                points.Add(ShowParticles[i].transform.position);
-            }
-            stickRender.SetPositions(points.ToArray());
-        }
-
+        
         // 计算两个棍子之间的距离
         private void SloveDistance(VParticle particleA, VParticle particleB)
         {
@@ -93,16 +81,64 @@ namespace zxGameMath.verletObj
                 particleB.CurPos -= ErrorFactor * delta;
             }
 
-            // if (!CheckIfParticleInRound(particleA)) 
-            //     particleA.CurPos = particleA.OldPos;
-            //
-            // if (!CheckIfParticleInRound(particleB)) 
-            //     particleB.CurPos = particleB.OldPos;
+            // 控制运动范围
+            if (!CheckIfParticleInRound(particleA)) 
+                particleA.CurPos = particleA.OldPos;
+            
+            if (!CheckIfParticleInRound(particleB)) 
+                particleB.CurPos = particleB.OldPos;
+        }
+        
+        /// <summary>
+        /// 规范Verlet质点的位置
+        /// </summary>
+        /// <param name="particle"></param>
+        /// <returns></returns>
+        public Boolean CheckIfParticleInRound(VParticle particle)
+        {
+            // 目前设定半径内范围运动
+            return particle.CurPos.magnitude <= VerletManager.Instance.sphereRound;
         }
 
         public void SolveConstrain()
         {
             SloveDistance(Particles[0], Particles[1]);
+        }
+
+        private void SlovePhysicCollider()
+        {
+            foreach (VParticle particle in Particles)
+            {
+                if (!particle.beFree)
+                    continue;
+                
+                RaycastHit hit;
+                if (Physics.Raycast(particle.OldPos, particle.CurPos - particle.OldPos, out hit, (particle.CurPos - particle.OldPos).magnitude))
+                {
+//                    particle.CurPos = hit.point;
+//                    Debug.Log(hit.point);
+
+                    GameObject debugSphere = GameObject.Instantiate(VerletManager.Instance.DebugSphere);
+                    debugSphere.transform.position = hit.point;
+                }
+            }
+        }
+        
+        // 同步位置信息
+        public void SyncVerletParticles()
+        {
+            
+            for (Int32 i = 0; i < Particles.Count; i++) {
+                ShowParticles[i].transform.position = Particles[i].CurPos;
+            }
+            
+            // 同步棍子
+            List<Vector3> points = new List<Vector3>();
+            for (Int32 i = 0; i < Particles.Count; i++)
+            {
+                points.Add(ShowParticles[i].transform.position);
+            }
+            stickRender.SetPositions(points.ToArray());
         }
         
         /// <summary>
@@ -111,7 +147,13 @@ namespace zxGameMath.verletObj
         public virtual void Update(Single delTime)
         {
             Verlet(delTime);
+            
+            // 距离判定
             SolveConstrain();
+            
+            // 碰撞判定
+            SlovePhysicCollider();
+            
             SyncVerletParticles();
         }
     }

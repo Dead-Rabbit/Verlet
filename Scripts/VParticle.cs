@@ -14,6 +14,8 @@ namespace zxGameMath
         public Boolean beFree = true;
         
         public Vector3 addForce = Vector3.zero;
+        
+//        public Vector3 target
 
         public VParticle()
         {

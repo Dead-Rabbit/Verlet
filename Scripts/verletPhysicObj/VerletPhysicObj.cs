@@ -85,7 +85,7 @@ namespace zxGameMath.verletObj
             // 控制运动范围
             if (!CheckIfParticleInRound(particleA)) 
                 particleA.CurPos = particleA.OldPos;
-            
+             
             if (!CheckIfParticleInRound(particleB)) 
                 particleB.CurPos = particleB.OldPos;
         }
@@ -120,7 +120,7 @@ namespace zxGameMath.verletObj
                     debugSphere.transform.position = hit.point;
 
 //                    particle.CurPos = hit.point + hit.distance * hit.normal;
-                    particle.addForce = hit.distance * 100 * 100 * hit.normal;
+                    particle.addForce = 10000 * hit.normal;
                 }
             }
         }

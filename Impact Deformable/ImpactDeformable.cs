@@ -629,7 +629,7 @@ public class ImpactDeformable : MonoBehaviour
         // Transform world point to mesh local
         Vector3 p = Vector3.zero;
         float r = 0;
-        if ((point != null) && (radius != null))
+        if (point != null && radius != null)
         {
             r = (float)radius;
             r *= r;

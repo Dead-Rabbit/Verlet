@@ -50,10 +50,10 @@ namespace zxGameMath
 //            _verletObjs.Add(new VerletStick(new Vector3(0, 0, 0)));
             
             // 创建 三棱锥
-            // _verletObjs.Add(new VerletHexagon(new Vector3(0, 0, 0)));
+            _verletObjs.Add(new VerletHexagon(new Vector3(0, 0, 0)));
             
             // 创建固定位置的棍子
-            _verletPhysicObjs.Add(new VerletPhysicObj(new Vector3(0, 0, 0)));
+//            _verletPhysicObjs.Add(new VerletPhysicObj(new Vector3(0, 0, 0)));
         }
 
         private void Update()

@@ -1,5 +1,6 @@
 using System;
 using System.Resources;
+using UnityEditor;
 using UnityEngine;
 
 namespace mesh
@@ -28,9 +29,15 @@ namespace mesh
 
         private void Awake()
         {
+            #region 初始化
+
             OpenBallControl = controlBallPrefab != null;
+            InitDebug();
+
             GetComponent<MeshFilter>().mesh = _mesh = new Mesh();
             _mesh.name = "自定义平面";
+
+            #endregion
             
             // 创建平面
             CreateMinePlan();
@@ -38,7 +45,7 @@ namespace mesh
 
         private void Update()
         {
-            
+            CheckAndMoveControlBalls();
         }
 
         #region Mesh
@@ -79,6 +86,42 @@ namespace mesh
                 _controlBalls[i] = Instantiate(controlBallPrefab, transform);
                 _controlBalls[i].transform.localPosition = _vertices[i];
             }
+        }
+
+        private void CheckAndMoveControlBalls()
+        {
+            Boolean ifChange = false;
+            for (Int32 i = 0; i < _controlBalls.Length; i++) {
+                if (_controlBalls[i].transform.localPosition != _vertices[i])
+                {
+                    ifChange = true;
+                    _vertices[i] = _controlBalls[i].transform.localPosition;
+                }
+            }
+
+            if (ifChange)
+            {
+                _mesh.vertices = _vertices;
+            }
+        }
+        
+        #endregion
+
+        #region 测试
+
+        private void InitDebug()
+        {
+            Selection.selectionChanged += OnSelectionChange;
+        }
+        
+        void OnSelectionChange()
+        {
+            if (null == Selection.activeGameObject)
+            {
+                return;
+            }
+            
+            Debug.Log(Selection.activeGameObject.transform.position);
         }
 
         #endregion

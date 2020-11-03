@@ -120,8 +120,6 @@ namespace mesh
             {
                 return;
             }
-            
-            Debug.Log(Selection.activeGameObject.transform.position);
         }
 
         #endregion

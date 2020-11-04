@@ -9,8 +9,8 @@ namespace zxVehicle.plane
         private struct WingPlateInfo
         {
             public Transform plate;
-            public Transform plateAxle;
-            public WingPlateInfo(Transform plate, Transform plateAxle)
+            public Vector3 plateAxle;
+            public WingPlateInfo(Transform plate, Vector3 plateAxle)
             {
                 this.plate = plate;
                 this.plateAxle = plateAxle;
@@ -37,7 +37,7 @@ namespace zxVehicle.plane
                 GameObject axle = leftPlateAxles[i];
                 if (null == axle) continue;
                 
-                _leftWingPlateInfos.Add(new WingPlateInfo(plate.transform, axle.transform));
+                _leftWingPlateInfos.Add(new WingPlateInfo(plate.transform, axle.transform.right));
             }
             
             for (Int32 i = 0; i < rightPlates.Length; i++) {
@@ -48,7 +48,7 @@ namespace zxVehicle.plane
                 GameObject axle = rightPlateAxles[i];
                 if (null == axle) continue;
                 
-                _rightWingPlateInfos.Add(new WingPlateInfo(plate.transform, axle.transform));
+                _rightWingPlateInfos.Add(new WingPlateInfo(plate.transform, axle.transform.right));
             }
         }
 
@@ -60,10 +60,10 @@ namespace zxVehicle.plane
             float diffOfHorizontal = (inputHorizontal - _preInputHorizontal) * 10;
             _preInputHorizontal = inputHorizontal;
             foreach (WingPlateInfo plateInfo in _leftWingPlateInfos) {
-                plateInfo.plate.Rotate(-plateInfo.plateAxle.transform.right, diffOfHorizontal);
+                plateInfo.plate.Rotate(-plateInfo.plateAxle, diffOfHorizontal);
             }
             foreach (WingPlateInfo plateInfo in _rightWingPlateInfos) {
-                plateInfo.plate.Rotate(plateInfo.plateAxle.transform.right, diffOfHorizontal);
+                plateInfo.plate.Rotate(plateInfo.plateAxle, diffOfHorizontal);
             }
             
             #endregion

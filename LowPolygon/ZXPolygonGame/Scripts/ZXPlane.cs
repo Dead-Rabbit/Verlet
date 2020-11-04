@@ -58,40 +58,14 @@ namespace zxVerticle
             // 初始化机翼
             InitZXPlaneWing();
         }
-
-        #region 初始化
-
-        private void InitZXPlaneWing()
-        {
-            wingAxles.Clear();
-            for (Int32 i = 1; i <= 3; i++) {
-                AddPlaneWing(transform.Find("Front_Left_" + i).gameObject);
-                AddPlaneWing(transform.Find("Front_Right_" + i).gameObject);
-            }
-        }
-
-        private void AddPlaneWing(GameObject wing)
-        {
-            GameObject wingAxle = wing.transform.Find("Axle").gameObject;
-            if (null == wingAxle) {
-                return;
-            }
-            
-            WingInfo wingInfo = new WingInfo();
-            wingInfo.wing = wing;
-            wingInfo.wingAxle = wingAxle;
-            wingAxles.Add(wingInfo);
-        }
-
-        #endregion
-
+        
         private void FixedUpdate()
         {
             _InputVert = Input.GetAxis("Vertical");
             _InputHorizontal = Input.GetAxis("Horizontal");
             
             // 轮子
-            UpdateWheels();
+            // UpdateWheels();
             
             // 机翼
             UpdateWings();
@@ -124,6 +98,30 @@ namespace zxVerticle
             FR.visualwheel.rotation = rot;
         }
 
+        #region 机翼
+
+        private void InitZXPlaneWing()
+        {
+            wingAxles.Clear();
+            for (Int32 i = 1; i <= 3; i++) {
+                AddPlaneWing(transform.Find("Wing/Front_Left_" + i).gameObject);
+                AddPlaneWing(transform.Find("Wing/Front_Right_" + i).gameObject);
+            }
+        }
+
+        private void AddPlaneWing(GameObject wing)
+        {
+            GameObject wingAxle = wing.transform.Find("Axle").gameObject;
+            if (null == wingAxle) {
+                return;
+            }
+            
+            WingInfo wingInfo = new WingInfo();
+            wingInfo.wing = wing;
+            wingInfo.wingAxle = wingAxle;
+            wingAxles.Add(wingInfo);
+        }
+        
         /// <summary>
         /// 更新机翼
         /// </summary>
@@ -131,5 +129,8 @@ namespace zxVerticle
         {
             
         }
+
+        #endregion
+
     }
 }

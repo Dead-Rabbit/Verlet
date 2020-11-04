@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -47,7 +46,7 @@ namespace zxVehicle.plane
             _inputVert = Input.GetAxis("Vertical");
             _inputHorizontal = Input.GetAxis("Horizontal");
             wheelManager.Run(_inputHorizontal, _inputVert);        // 轮子
-            planeWingManager.Run(_inputHorizontal, _inputVert);    // 机翼
+            planeWingManager.Run(_inputHorizontal);    // 机翼
         }
     }
 }

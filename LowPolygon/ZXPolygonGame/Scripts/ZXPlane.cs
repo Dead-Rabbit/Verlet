@@ -6,13 +6,12 @@ namespace zxVerticle
     [RequireComponent(typeof(Rigidbody))]
     public class ZXPlane : MonoBehaviour
     {
-        
-
-        [Header("刚体")]
         private Rigidbody _rigidbody;
         public GameObject centerOfMass;
-        private float vert = 0;
-        private float horz = 0;
+        
+        // 输入
+        private float _InputVert = 0;
+        private float _InputHorizontal = 0;
 
         #region 轮子
         
@@ -34,15 +33,11 @@ namespace zxVerticle
 
         #region 机翼
 
-        [System.Serializable]
-        public struct WingInfo
-        {
-            public GameObject wing;
-            private WheelCollider axle;
-        }
         [Header("机翼")] 
-        public WingInfo[] leftWingInfos;
-        public WingInfo[] rightWingInfos;
+        public GameObject[] leftWingInfos;
+        public GameObject leftWingPlane;
+        public GameObject[] rightWingInfos;
+        public GameObject rightWingPlane;
 
         #endregion
 
@@ -68,17 +63,25 @@ namespace zxVerticle
 
         private void FixedUpdate()
         {
-            vert = Input.GetAxis("Vertical");
-            horz = Input.GetAxis("Horizontal");
+            _InputVert = Input.GetAxis("Vertical");
+            _InputHorizontal = Input.GetAxis("Horizontal");
             
+            // 轮子
             UpdateWheels();
+            
+            // 机翼
+            UpdateWings();
         }
+        
+        /// <summary>
+        /// 更新轮子
+        /// </summary>
         private void UpdateWheels()
         {
-            FL.wheelcollider.steerAngle = horz * steer;
-            FR.wheelcollider.steerAngle = horz * steer;
-            FL.wheelcollider.motorTorque = vert * motor;
-            FR.wheelcollider.motorTorque = vert * motor;
+            FL.wheelcollider.steerAngle = _InputHorizontal * steer;
+            FR.wheelcollider.steerAngle = _InputHorizontal * steer;
+            FL.wheelcollider.motorTorque = _InputVert * motor;
+            FR.wheelcollider.motorTorque = _InputVert * motor;
             if (Input.GetButton("Fire1") == true) {
                 FL.wheelcollider.brakeTorque = brake;
                 FR.wheelcollider.brakeTorque = brake;
@@ -95,6 +98,14 @@ namespace zxVerticle
             FR.wheelcollider.GetWorldPose(out pos, out rot);
             FR.visualwheel.position = pos;
             FR.visualwheel.rotation = rot;
+        }
+
+        /// <summary>
+        /// 更新机翼
+        /// </summary>
+        private void UpdateWings()
+        {
+            
         }
     }
 }

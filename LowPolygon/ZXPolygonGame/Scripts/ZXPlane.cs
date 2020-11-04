@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace zxVerticle
@@ -34,10 +35,16 @@ namespace zxVerticle
         #region 机翼
 
         [Header("机翼")] 
-        public GameObject[] leftWingInfos;
+        // public GameObject[] leftWings;
         public GameObject leftWingPlane;
-        public GameObject[] rightWingInfos;
+        // public GameObject[] rightWings;
         public GameObject rightWingPlane;
+        private struct WingInfo
+        {
+            public GameObject wing;
+            public GameObject wingAxle;
+        }
+        private List<WingInfo> wingAxles = new List<WingInfo>();
 
         #endregion
 
@@ -49,14 +56,31 @@ namespace zxVerticle
                 _rigidbody.centerOfMass = centerOfMass.transform.position;
             }
             // 初始化机翼
-            InitZXPlanWing();
+            InitZXPlaneWing();
         }
 
         #region 初始化
 
-        private void InitZXPlanWing()
+        private void InitZXPlaneWing()
         {
+            wingAxles.Clear();
+            for (Int32 i = 1; i <= 3; i++) {
+                AddPlaneWing(transform.Find("Front_Left_" + i).gameObject);
+                AddPlaneWing(transform.Find("Front_Right_" + i).gameObject);
+            }
+        }
+
+        private void AddPlaneWing(GameObject wing)
+        {
+            GameObject wingAxle = wing.transform.Find("Axle").gameObject;
+            if (null == wingAxle) {
+                return;
+            }
             
+            WingInfo wingInfo = new WingInfo();
+            wingInfo.wing = wing;
+            wingInfo.wingAxle = wingAxle;
+            wingAxles.Add(wingInfo);
         }
 
         #endregion

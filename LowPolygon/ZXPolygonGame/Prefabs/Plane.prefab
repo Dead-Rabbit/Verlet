@@ -973,14 +973,8 @@ MonoBehaviour:
   FR:
     visualwheel: {fileID: 2738555431330493902}
     wheelcollider: {fileID: 139546194}
-  leftWingInfos:
-  - {fileID: 8747441705066963180}
-  - {fileID: 5498428377429886502}
-  - {fileID: 4796452785667057815}
-  rightWingInfos:
-  - {fileID: 3168837843295069973}
-  - {fileID: 3544699009290583940}
-  - {fileID: 7788411851569807121}
+  leftWingPlane: {fileID: 8825125832902371670}
+  rightWingPlane: {fileID: 7796231072361215033}
 --- !u!1 &2278570144201239094
 GameObject:
   m_ObjectHideFlags: 0

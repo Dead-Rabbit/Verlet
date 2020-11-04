@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace zxVerticle
+namespace zxVehicle.plane
 {
     public class ZXPlaneCamera : MonoBehaviour
     {

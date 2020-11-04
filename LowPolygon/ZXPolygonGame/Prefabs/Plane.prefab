@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 1390957685}
   - component: {fileID: 1924688897}
   m_Layer: 0
-  m_Name: Wing
+  m_Name: Wings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1072,7 +1072,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   centerOfMass: {fileID: 5069914202004846945}
   wheelManager: {fileID: 944029870}
-  planeWingManager: {fileID: 0}
+  planeWingManager: {fileID: 1924688897}
 --- !u!114 &7974964497211770919
 MonoBehaviour:
   m_ObjectHideFlags: 0

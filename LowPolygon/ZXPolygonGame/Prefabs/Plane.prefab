@@ -87,6 +87,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlPlatePower: 0
+  floatPlatePower: 0
   leftControlPlates:
   - {fileID: 8747441705066963180}
   - {fileID: 5498428377429886502}

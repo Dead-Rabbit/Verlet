@@ -6,6 +6,8 @@ namespace zxVehicle.plane
 {
     public class ZXPlaneWingManager : MonoBehaviour
     {
+        private ZXPlane plane;
+        
         private struct WingPlateInfo
         {
             public Transform plate;
@@ -16,6 +18,9 @@ namespace zxVehicle.plane
                 this.plateAxle = plateAxle;
             }
         }
+
+        [Range(0, 10)]
+        public float simulateSpeed = 0;
         
         // 旋转板
         public GameObject[] leftPlates;
@@ -29,6 +34,13 @@ namespace zxVehicle.plane
 
         void Awake()
         {
+            // 找到对应飞机
+            plane = transform.parent.GetComponent<ZXPlane>();
+            if (null == plane) {
+                Debug.LogError("机翼未找到宿主飞机");
+                return;
+            }
+            
             for (Int32 i = 0; i < leftPlates.Length; i++) {
                 GameObject plate = leftPlates[i];
                 if (null == plate) continue;
@@ -70,7 +82,12 @@ namespace zxVehicle.plane
 
             #region 飞行效果
 
-            
+            // 模拟速度
+            Vector3 velocity = plane.transform.forward * simulateSpeed;
+            // 计算飞行给面板带来的力
+            foreach (WingPlateInfo plateInfo in _leftWingPlateInfos) {
+                // plateInfo.plate.up
+            }
 
             #endregion
         }

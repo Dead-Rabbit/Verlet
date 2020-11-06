@@ -123,10 +123,11 @@ namespace zxVehicle.plane
             // 模拟机翼的飞行升力
             // Vector3 floatForce = _planeRigidbody.velocity.normalized * floatPlatePower;
             for (Int32 i = 0; i < 2; i++) {
-                GameObject plate = planePanelWing[i];
-                Vector3 floatFrontForce = plate.transform.up * floatPlatePowerFront;
-                _DebugForceRay[i] = new Ray(_planeRigidbody.centerOfMass, _planeRigidbody.centerOfMass + floatFrontForce);
-                _planeRigidbody.AddForceAtPosition(floatFrontForce, plate.transform.position);
+                // GameObject plate = planePanelWing[i];
+                // Vector3 forceForward =   .up;
+                // Vector3 floatFrontForce = forceForward * floatPlatePowerFront;
+                // _DebugForceRay[i] = new Ray(_planeRigidbody.centerOfMass, _planeRigidbody.centerOfMass + floatFrontForce);
+                // _planeRigidbody.AddForceAtPosition(floatFrontForce, plate.transform.position);
             }
             GameObject backPlate = planePanelWing[2];
             Vector3 floatBackForce = backPlate.transform.up * floatPlatePowerBack;

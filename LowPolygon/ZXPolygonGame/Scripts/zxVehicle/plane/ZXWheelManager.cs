@@ -4,12 +4,6 @@ namespace zxVehicle.plane
 {
     public class ZXWheelManager : MonoBehaviour
     {
-        // private ZXVehicle owner;
-        // public ZXWheelManager(ZXVehicle owner)
-        // {
-        //     this.owner = owner;
-        // }
-        
         [System.Serializable]
         public struct WheelInfo
         {

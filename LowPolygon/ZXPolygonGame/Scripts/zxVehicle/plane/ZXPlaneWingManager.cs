@@ -24,9 +24,10 @@ namespace zxVehicle.plane
             }
         }
 
-        [Range(0, 100)] public float controlPlatePower = 0;
-        [Range(0, 1000)] public float floatPlatePowerFront = 0;
-        [Range(0, 1000)] public float floatPlatePowerBack = 0;
+        // [Range(0, 100)] public float controlPlatePower = 0;
+        // [Range(0, 1000)] public float floatPlatePowerFront = 0;
+        // [Range(0, 1000)] public float floatPlatePowerBack = 0;
+        public float flyMinSpeed = 1f;
         
         // 旋转板
         public GameObject[] leftControlPlates;
@@ -95,8 +96,7 @@ namespace zxVehicle.plane
 
             #region 飞行效果
 
-            _planeRigidbody.AddForce(new Vector3(0, _planeRigidbody.mass * 9.81f, 0));
-            
+            // _planeRigidbody.AddForce(new Vector3(0, _planeRigidbody.mass * 9.81f, 0));
             SimulatePlaneFly();
             
             #endregion
@@ -104,34 +104,9 @@ namespace zxVehicle.plane
 
         private void SimulatePlaneFly()
         {
-            // 模拟速度
-            // TODO 设定控制方向 - z方向减弱控制，加强y方向的控制
-            // TODO 添加受力和机翼角度之间的关系
-            
-            // Vector3 controlForce = _planeRigidbody.velocity.normalized * controlPlatePower;
-            // // 计算飞行给面板带来的力
-            // // TODO 受力根据速度大小来确定力度
-            // foreach (WingPlateInfo plateInfo in _leftControlWingPlateInfos) {
-            //     Transform plate = plateInfo.plate;
-            //     _planeRigidbody.AddForceAtPosition(controlForce, plate.position);
-            // }
-            // foreach (WingPlateInfo plateInfo in _righControltWingPlateInfos) {
-            //     Transform plate = plateInfo.plate;
-            //     _planeRigidbody.AddForceAtPosition(controlForce, plate.position);
-            // }
-
-            // 模拟机翼的飞行升力
-            // Vector3 floatForce = _planeRigidbody.velocity.normalized * floatPlatePower;
-            for (Int32 i = 0; i < 2; i++) {
-                // GameObject plate = planePanelWing[i];
-                // Vector3 forceForward =   .up;
-                // Vector3 floatFrontForce = forceForward * floatPlatePowerFront;
-                // _DebugForceRay[i] = new Ray(_planeRigidbody.centerOfMass, _planeRigidbody.centerOfMass + floatFrontForce);
-                // _planeRigidbody.AddForceAtPosition(floatFrontForce, plate.transform.position);
+            if (_planeRigidbody.velocity.magnitude > flyMinSpeed) {
+                _plane.transform.forward = new Vector3(0, 0, 1);
             }
-            GameObject backPlate = planePanelWing[2];
-            Vector3 floatBackForce = backPlate.transform.up * floatPlatePowerBack;
-            _planeRigidbody.AddForceAtPosition(floatBackForce, backPlate.transform.position);
         }
 
         private void OnDrawGizmos()

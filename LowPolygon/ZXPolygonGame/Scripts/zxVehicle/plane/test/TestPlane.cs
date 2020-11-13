@@ -39,15 +39,19 @@ namespace zxVehicle.plane
         /// <param name="speed"></param>
         public override void MoveLR(float speed)
         {
-            //左右移动
-            if ((IsSing) || IsOnGround) return;//如果在地面或者飞机处于特技状态
+            // 左右移动
+            //如果在地面或者飞机处于特技状态
+            if ((IsSing) || IsOnGround) return;
             //IsLRB = false;
             Vector3 vector = transform.right;
             vector.y = 0;
 
-            Move(speed * vector * aircaft.MoveLRSpeed * Time.deltaTime * CurrentSpeed / aircaft.MoveFBSpeed);    //侧飞
-            //Balance(Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, -aircaft.AxisLR * speed), aircaft.RoteLRSpeed * Time.deltaTime);/旋转机身，实现侧飞的效果
-            //print("MoveLR" + speed);
+            // 侧飞
+            Move(speed * vector * aircaft.MoveLRSpeed * Time.deltaTime * CurrentSpeed / aircaft.MoveFBSpeed);
+            
+            // 旋转机身，实现侧飞的效果
+            Balance(Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, -aircaft.AxisLR * speed), aircaft.RoteLRSpeed * Time.deltaTime);
+            // print("MoveLR" + speed);
             
         }
 

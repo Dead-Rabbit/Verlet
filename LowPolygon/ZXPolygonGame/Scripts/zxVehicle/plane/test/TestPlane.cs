@@ -64,7 +64,11 @@ namespace zxVehicle.plane
         }
 
         #endregion
-        
+
+        public override void Balance(Quaternion r, float speed)
+        {
+        }
+
         /// <summary>
         /// 飞机的状态控制
         /// </summary>
@@ -83,7 +87,6 @@ namespace zxVehicle.plane
                     downSpeed = Mathf.Lerp(downSpeed, 0.1f, Time.deltaTime);
                     //print("downSpeed" + downSpeed);
                     RoteUD(downSpeed);//机身前倾实现下落效果
-
                 }
                 rigidbody.useGravity = IsOnGround;//如果飞机在地面，启用重力，否则不使用重力
             }

@@ -24,13 +24,31 @@ namespace zxVehicle.plane
         {
             if (!rigidbody) rigidbody = GetComponent<Rigidbody>();
         }
+        
+        #region 待编写
+
+        private void Move(Single speed)
+        {
+            
+        }
+
+        private void Altigraph()
+        {
+            
+        }
+
+        #endregion
 
         public override void MoveFB(float speed)//速度控制
         {
-            IsRun = true;//主动控制打开
-            CurrentSpeed += speed * aircaft.Acc * Time.deltaTime;//加/减速
-            CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, aircaft.MaxSpeed);//控制速度在最大值范围内
+            //主动控制打开
+            IsRun = true;
             
+            //加/减速
+            CurrentSpeed += speed * aircaft.Acc * Time.deltaTime;
+            
+            //控制速度在最大值范围内
+            CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, aircaft.MaxSpeed);
         }
         
         /// <summary>
@@ -51,20 +69,6 @@ namespace zxVehicle.plane
             
         }
 
-        #region 待编写
-
-        private void Move(Single speed)
-        {
-            
-        }
-
-        private void Altigraph()
-        {
-            
-        }
-
-        #endregion
-        
         /// <summary>
         /// 飞机的状态控制
         /// </summary>

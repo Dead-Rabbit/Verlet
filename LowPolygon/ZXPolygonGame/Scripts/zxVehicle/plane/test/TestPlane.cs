@@ -8,11 +8,8 @@ namespace zxVehicle.plane
 {
     public class TestPlane : Flight
     {
-
         //飞机小于极速的1/5时，飞机下降
-        
         bool IsFBB = false,IsLRB = false;
-
         private float downSpeed;
         private bool IsRun = false;
 
@@ -22,6 +19,7 @@ namespace zxVehicle.plane
             CurrentSpeed += speed*aircaft.Acc*Time.deltaTime;
             CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, aircaft.MaxSpeed);
         }
+        
         public override void MoveLR(float speed)
         {
             //左右移动
@@ -33,12 +31,11 @@ namespace zxVehicle.plane
             Move(speed * vector * aircaft.MoveLRSpeed * Time.deltaTime * CurrentSpeed/aircaft.MoveFBSpeed);
             
             Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y, -aircaft.AxisFB * speed), aircaft.RoteLRSpeed * Time.deltaTime*3);
-            //print("MoveLR" + speed);
         }
+        
         public override void Operational()
         {
             //操作
-            //
             Altigraph();
             
             if (CurrentSpeed < aircaft.OffSpeed)
@@ -114,7 +111,6 @@ namespace zxVehicle.plane
                 IsSing = true;
                 StartCoroutine(SLR(axis));
             }
-            
         }
 
         IEnumerator SLR(float speed) {
@@ -138,6 +134,7 @@ namespace zxVehicle.plane
             }
             IsSing = false;
         }
+        
         public override void StuntUD(float axis)
         {
             if ((IsSing) || IsOnGround && CurrentSpeed < aircaft.MoveFBSpeed / 3.6f) return;
@@ -149,6 +146,7 @@ namespace zxVehicle.plane
 
             }
         }
+        
         IEnumerator SUD(float speed)
         {
             //这个特技是指侧飞，获取按下飞机的坐标和速度F1，计算出侧飞半径，

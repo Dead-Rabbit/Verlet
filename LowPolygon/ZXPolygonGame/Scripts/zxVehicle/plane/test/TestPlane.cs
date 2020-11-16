@@ -1,104 +1,62 @@
 using System;
+using System.Collections;
 using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace zxVehicle.plane
 {
-    public class TestPlane : TestPlaneInterface
+    public class TestPlane : Flight
     {
 
-        public Single CurrentSpeed;
-        public Single downSpeed;
-
-        public Boolean IsRun;
-        public Boolean IsSing;
-        public Boolean IsOnGround;
-
-        public Boolean IsLRB;
-        public Boolean IsFBB;
-
-        private Rigidbody rigidbody;
-
-        private void Awake()
-        {
-            if (!rigidbody) rigidbody = GetComponent<Rigidbody>();
-        }
+        //飞机小于极速的1/5时，飞机下降
         
-        #region 待编写
+        bool IsFBB = false,IsLRB = false;
 
-        private void Move(Single speed)
+        private float downSpeed;
+        private bool IsRun = false;
+
+        public override void MoveFB(float speed)
         {
-            
-        }
-
-        private void Altigraph()
-        {
-            
-        }
-
-        #endregion
-
-        public override void MoveFB(float speed)//速度控制
-        {
-            //主动控制打开
             IsRun = true;
-            
-            //加/减速
-            CurrentSpeed += speed * aircaft.Acc * Time.deltaTime;
-            
-            //控制速度在最大值范围内
+            CurrentSpeed += speed*aircaft.Acc*Time.deltaTime;
             CurrentSpeed = Mathf.Clamp(CurrentSpeed, 0, aircaft.MaxSpeed);
         }
-        
-        /// <summary>
-        /// 水平移动飞机，飞机的侧飞
-        /// </summary>
-        /// <param name="speed"></param>
         public override void MoveLR(float speed)
         {
             //左右移动
-            if ((IsSing) || IsOnGround) return;//如果在地面或者飞机处于特技状态
+            if ((IsSing) || IsOnGround) return;
             //IsLRB = false;
-            Vector3 vector = transform.right;
+            Vector3 vector = body.right;
             vector.y = 0;
 
-            Move(speed * vector * aircaft.MoveLRSpeed * Time.deltaTime * CurrentSpeed / aircaft.MoveFBSpeed);    //侧飞
-            //Balance(Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, -aircaft.AxisLR * speed), aircaft.RoteLRSpeed * Time.deltaTime);/旋转机身，实现侧飞的效果
-            //print("MoveLR" + speed);
+            Move(speed * vector * aircaft.MoveLRSpeed * Time.deltaTime * CurrentSpeed/aircaft.MoveFBSpeed);
             
+            Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y, -aircaft.AxisFB * speed), aircaft.RoteLRSpeed * Time.deltaTime*3);
+            //print("MoveLR" + speed);
         }
-
-        /// <summary>
-        /// 飞机的状态控制
-        /// </summary>
         public override void Operational()
         {
-            //测量高度
+            //操作
+            //
             Altigraph();
             
-            //小于起飞速度
             if (CurrentSpeed < aircaft.OffSpeed)
-            {
-                //落下
-                if (!IsOnGround)//在空中
+            { //落下
+                if (!IsOnGround)
                 {
-                    Move(-Vector3.up * Time.deltaTime * 10 * (1 - CurrentSpeed / (aircaft.OffSpeed)));//失重下落
+                    Move(-Vector3.up * Time.deltaTime * 10 * (1 - CurrentSpeed / (aircaft.OffSpeed)));
                     downSpeed = Mathf.Lerp(downSpeed, 0.1f, Time.deltaTime);
                     //print("downSpeed" + downSpeed);
-                    RoteUD(downSpeed);//机身前倾实现下落效果
-
+                    RoteUD(downSpeed);
                 }
-                rigidbody.useGravity = IsOnGround;//如果飞机在地面，启用重力，否则不使用重力
+                if (!rigidbody) rigidbody = GetComponent<Rigidbody>();
+                rigidbody.useGravity = IsOnGround;
             }
             else {
                 downSpeed = 0;
             }
-            
-            //保持飞机的平衡
             Balance();
-            
-            //保持飞机以正常速度飞行
             if (!IsRun) {
                 if (CurrentSpeed > aircaft.MoveFBSpeed) CurrentSpeed = Mathf.Lerp(CurrentSpeed, aircaft.MoveFBSpeed,Time.deltaTime);
 
@@ -108,14 +66,9 @@ namespace zxVehicle.plane
 
                 }
             }
-            
-            Move(transform.forward * CurrentSpeed * Time.deltaTime);//调用飞行方法
+            Move(body.forward * CurrentSpeed * Time.deltaTime);
+            IsRun = false;
         }
-        
-        /// <summary>
-        /// 飞机的转向
-        /// </summary>
-        /// <param name="speed"></param>
         public override void RoteLR(float speed)
         {
             //左右旋转
@@ -123,14 +76,11 @@ namespace zxVehicle.plane
             IsLRB = false;
             Rote(speed * Vector3.up * aircaft.RoteLRSpeed * Time.deltaTime * CurrentSpeed / aircaft.MoveFBSpeed);
             
-            Balance(Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y,-aircaft.AxisLR * speed), aircaft.RoteLRSpeed * Time.deltaTime);
-            //print("RoteLR" + speed);
+            Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y,-aircaft.AxisLR * speed), aircaft.RoteLRSpeed * Time.deltaTime);
+
         }
 
-        /// <summary>
-        /// 飞机的转向
-        /// </summary>
-        /// <param name="speed"></param>
+        
         public override void RoteUD(float speed)
         {
             //上下旋转
@@ -138,30 +88,91 @@ namespace zxVehicle.plane
             if ((IsSing) || IsOnGround && CurrentSpeed < aircaft.MoveFBSpeed / 3.6f) return;
             if (CurrentSpeed < aircaft.MoveFBSpeed / 3.6f && speed<0) return;
             IsFBB = false;
-            Balance(Quaternion.Euler(aircaft.AxisFB * speed, transform.eulerAngles.y, transform.eulerAngles.z), aircaft.RoteFBSpeed * Time.deltaTime * CurrentSpeed / aircaft.MoveFBSpeed);
+            Balance(Quaternion.Euler(aircaft.AxisFB * speed, body.eulerAngles.y, body.eulerAngles.z), aircaft.RoteFBSpeed * Time.deltaTime * CurrentSpeed / aircaft.MoveFBSpeed);
             //print("RoteUD" + speed);
         }
-        
-        /// <summary>
-        /// 飞机的平衡方法，当无输入事件时，飞机自动平衡
-        /// </summary>
         public override void Balance()
         {
             if (IsSing) return;
-            
-            //z轴平衡（左右）
             if (IsLRB)
             {
-                Balance(Quaternion.Euler(transform.eulerAngles.x, transform.eulerAngles.y, 0), aircaft.RoteLRSpeed * Time.deltaTime/1.2f );
+                Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y, 0), aircaft.RoteLRSpeed * Time.deltaTime/1.2f );
             }
-            
-            //x轴平衡（上下）
             if (IsFBB)
             {
-                Balance(Quaternion.Euler(0, transform.eulerAngles.y, transform.eulerAngles.z), aircaft.RoteFBSpeed * Time.deltaTime /1.3f);
+                Balance(Quaternion.Euler(0, body.eulerAngles.y, body.eulerAngles.z), aircaft.RoteFBSpeed * Time.deltaTime /1.3f);
             }
-            IsLRB = true;//自动平衡打开
-            IsFBB = true;//自动平衡打开
+            IsLRB = true;
+            IsFBB = true;
+        }
+        private float lastSTime;
+        
+        public override void StuntLR(float axis) {
+            if ((IsSing) || IsOnGround && CurrentSpeed < aircaft.MoveFBSpeed / 3.6f) return;
+
+            if (!IsSing) {
+                IsSing = true;
+                StartCoroutine(SLR(axis));
+            }
+            
+        }
+
+        IEnumerator SLR(float speed) {
+            //这个特技是指侧飞，获取按下飞机的坐标和速度F1，计算出侧飞半径，
+            //直到飞行角度和F1垂直的位置
+            speed = (speed > 0 ? 1 : -1);
+            Vector3 aim = body.right * (speed);
+            aim.y = 0;
+            while(Vector3.Dot(aim.normalized,body.forward.normalized)<0.99f){
+                Rote(speed * Vector3.up * aircaft.RoteLRSpeed * Time.deltaTime);
+                
+                Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y, -85 * (speed )), aircaft.RoteLRSpeed * Time.deltaTime*3.8f);
+                Balance(Quaternion.Euler(0, body.eulerAngles.y, body.eulerAngles.z), aircaft.RoteFBSpeed * Time.deltaTime *1.8f);
+                yield return new WaitForFixedUpdate();
+            }
+            while ((body.eulerAngles.z > 15) && (body.eulerAngles.z < 180) || (body.eulerAngles.z < 345) && (body.eulerAngles.z > 270))
+            {
+                Balance(Quaternion.Euler(0, body.eulerAngles.y, body.eulerAngles.z), aircaft.RoteFBSpeed * Time.deltaTime);
+                Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y, 0), aircaft.RoteLRSpeed * Time.deltaTime * 3);
+                yield return new WaitForFixedUpdate();
+            }
+            IsSing = false;
+        }
+        public override void StuntUD(float axis)
+        {
+            if ((IsSing) || IsOnGround && CurrentSpeed < aircaft.MoveFBSpeed / 3.6f) return;
+
+            if (!IsSing)
+            {
+                IsSing = true;
+                StartCoroutine(SUD(axis));
+
+            }
+        }
+        IEnumerator SUD(float speed)
+        {
+            //这个特技是指侧飞，获取按下飞机的坐标和速度F1，计算出侧飞半径，
+            //直到飞行角度和F1垂直的位置
+            speed = (speed > 0 ? 1 : -1);
+            Vector3 aim = -body.forward ;
+            aim.y = 0;
+            while (Vector3.Dot(aim.normalized, body.forward.normalized) < 0.8f)
+            {
+                Vector3 v = body.right;
+                v.y= 0;
+                Rote(body.right * Time.deltaTime * -90 * speed);
+                Move(-Vector3.up * speed * Time.deltaTime * 10 * (CurrentSpeed / (aircaft.OffSpeed)));
+                //body.Rotate(Vector3.right * Time.deltaTime * -90,Space.Self);
+                //Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y, 0), aircaft.RoteLRSpeed * Time.deltaTime*5);
+                yield return new WaitForFixedUpdate();
+            }
+            while ((body.eulerAngles.z > 15) && (body.eulerAngles.z < 180) || (body.eulerAngles.z < 345) && (body.eulerAngles.z >270))
+            {
+                Balance(Quaternion.Euler(0, body.eulerAngles.y, body.eulerAngles.z), aircaft.RoteFBSpeed * Time.deltaTime );
+                Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y, 0), aircaft.RoteLRSpeed * Time.deltaTime*3);
+                yield return new WaitForFixedUpdate();
+            }
+            IsSing = false;
         }
     }
 }

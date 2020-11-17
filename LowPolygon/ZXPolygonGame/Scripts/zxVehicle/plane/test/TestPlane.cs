@@ -54,6 +54,7 @@ namespace zxVehicle.plane
             else {
                 downSpeed = 0;
             }
+            
             Balance();
             if (!IsRun) {
                 if (CurrentSpeed > aircaft.MoveFBSpeed) CurrentSpeed = Mathf.Lerp(CurrentSpeed, aircaft.MoveFBSpeed,Time.deltaTime);
@@ -64,18 +65,20 @@ namespace zxVehicle.plane
 
                 }
             }
+            
             Move(body.forward * CurrentSpeed * Time.deltaTime);
+            
             IsRun = false;
         }
         public override void RoteLR(float speed)
         {
             // 左右旋转
             if ((IsSing) || IsOnGround) return;
+            
             IsLRB = false;
             Rote(speed * Vector3.up * aircaft.RoteLRSpeed * Time.deltaTime * CurrentSpeed / aircaft.MoveFBSpeed);
             
             Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y,-aircaft.AxisLR * speed), aircaft.RoteLRSpeed * Time.deltaTime);
-
         }
 
         

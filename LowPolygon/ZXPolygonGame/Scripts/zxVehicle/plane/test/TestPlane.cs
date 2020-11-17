@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,10 +7,11 @@ namespace zxVehicle.plane
 {
     public class TestPlane : Flight
     {
-        //飞机小于极速的1/5时，飞机下降
-        bool IsFBB = false,IsLRB = false;
-        private float downSpeed;
-        private bool IsRun = false;
+        // 飞机小于极速的1/5时，飞机下降
+        private Boolean IsFBB = false;
+        private Boolean IsLRB = false;
+        private Single downSpeed;
+        private Boolean IsRun = false;
 
         public override void MoveFB(float speed)
         {
@@ -22,9 +22,9 @@ namespace zxVehicle.plane
         
         public override void MoveLR(float speed)
         {
-            //左右移动
+            // 左右移动
             if ((IsSing) || IsOnGround) return;
-            //IsLRB = false;
+            // IsLRB = false;
             Vector3 vector = body.right;
             vector.y = 0;
 
@@ -35,16 +35,17 @@ namespace zxVehicle.plane
         
         public override void Operational()
         {
-            //操作
+            // 操作
             Altigraph();
             
             if (CurrentSpeed < aircaft.OffSpeed)
-            { //落下
+            {
+                // 落下
                 if (!IsOnGround)
                 {
                     Move(-Vector3.up * Time.deltaTime * 10 * (1 - CurrentSpeed / (aircaft.OffSpeed)));
                     downSpeed = Mathf.Lerp(downSpeed, 0.1f, Time.deltaTime);
-                    //print("downSpeed" + downSpeed);
+                    // print("downSpeed" + downSpeed);
                     RoteUD(downSpeed);
                 }
                 if (!rigidbody) rigidbody = GetComponent<Rigidbody>();
@@ -68,7 +69,7 @@ namespace zxVehicle.plane
         }
         public override void RoteLR(float speed)
         {
-            //左右旋转
+            // 左右旋转
             if ((IsSing) || IsOnGround) return;
             IsLRB = false;
             Rote(speed * Vector3.up * aircaft.RoteLRSpeed * Time.deltaTime * CurrentSpeed / aircaft.MoveFBSpeed);
@@ -80,13 +81,13 @@ namespace zxVehicle.plane
         
         public override void RoteUD(float speed)
         {
-            //上下旋转
-            //速度和角度
+            // 上下旋转
+            // 速度和角度
             if ((IsSing) || IsOnGround && CurrentSpeed < aircaft.MoveFBSpeed / 3.6f) return;
             if (CurrentSpeed < aircaft.MoveFBSpeed / 3.6f && speed<0) return;
             IsFBB = false;
             Balance(Quaternion.Euler(aircaft.AxisFB * speed, body.eulerAngles.y, body.eulerAngles.z), aircaft.RoteFBSpeed * Time.deltaTime * CurrentSpeed / aircaft.MoveFBSpeed);
-            //print("RoteUD" + speed);
+            // print("RoteUD" + speed);
         }
         public override void Balance()
         {
@@ -114,8 +115,8 @@ namespace zxVehicle.plane
         }
 
         IEnumerator SLR(float speed) {
-            //这个特技是指侧飞，获取按下飞机的坐标和速度F1，计算出侧飞半径，
-            //直到飞行角度和F1垂直的位置
+            // 这个特技是指侧飞，获取按下飞机的坐标和速度F1，计算出侧飞半径，
+            // 直到飞行角度和F1垂直的位置
             speed = (speed > 0 ? 1 : -1);
             Vector3 aim = body.right * (speed);
             aim.y = 0;
@@ -149,8 +150,8 @@ namespace zxVehicle.plane
         
         IEnumerator SUD(float speed)
         {
-            //这个特技是指侧飞，获取按下飞机的坐标和速度F1，计算出侧飞半径，
-            //直到飞行角度和F1垂直的位置
+            // 这个特技是指侧飞，获取按下飞机的坐标和速度F1，计算出侧飞半径，
+            // 直到飞行角度和F1垂直的位置
             speed = (speed > 0 ? 1 : -1);
             Vector3 aim = -body.forward ;
             aim.y = 0;
@@ -160,8 +161,8 @@ namespace zxVehicle.plane
                 v.y= 0;
                 Rote(body.right * Time.deltaTime * -90 * speed);
                 Move(-Vector3.up * speed * Time.deltaTime * 10 * (CurrentSpeed / (aircaft.OffSpeed)));
-                //body.Rotate(Vector3.right * Time.deltaTime * -90,Space.Self);
-                //Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y, 0), aircaft.RoteLRSpeed * Time.deltaTime*5);
+                // body.Rotate(Vector3.right * Time.deltaTime * -90,Space.Self);
+                // Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y, 0), aircaft.RoteLRSpeed * Time.deltaTime*5);
                 yield return new WaitForFixedUpdate();
             }
             while ((body.eulerAngles.z > 15) && (body.eulerAngles.z < 180) || (body.eulerAngles.z < 345) && (body.eulerAngles.z >270))

@@ -72,11 +72,13 @@ namespace zxVehicle.plane
             //     wheels[i].WheelControl(Height < 10f || IsOnGround);
             // }
         }
+        
         public void Balance(Quaternion r, float speed)
         {
             body.rotation = Quaternion.RotateTowards(body.rotation,
                 r, speed);
         }
+        
         public abstract void Balance();
     }
 }

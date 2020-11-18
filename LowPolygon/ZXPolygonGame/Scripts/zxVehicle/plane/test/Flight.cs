@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using zxVehicle.plane;
 
@@ -65,6 +66,8 @@ namespace zxVehicle.plane
             if (IsOnGround)
                 IsOnGround = Height < 1.1f;
 
+            Debug.Log("IsOnGround = " + IsOnGround);
+
             // if (wheels == null) wheels = GetComponentsInChildren<FlightWheels>();
             //
             // for (int i = 0; i < wheels.Length; i++)
@@ -80,5 +83,10 @@ namespace zxVehicle.plane
         }
         
         public abstract void Balance();
+
+        private void FixedUpdate()
+        {
+            Operational();
+        }
     }
 }

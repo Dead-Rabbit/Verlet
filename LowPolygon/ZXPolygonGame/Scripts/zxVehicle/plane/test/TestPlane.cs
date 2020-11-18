@@ -81,7 +81,6 @@ namespace zxVehicle.plane
             Balance(Quaternion.Euler(body.eulerAngles.x, body.eulerAngles.y,-aircaft.AxisLR * speed), aircaft.RoteLRSpeed * Time.deltaTime);
         }
 
-        
         public override void RoteUD(float speed)
         {
             // 上下旋转

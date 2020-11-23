@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace zxVehicle.plane
@@ -40,6 +41,10 @@ namespace zxVehicle.plane
             FR.wheelcollider.GetWorldPose(out pos, out rot);
             FR.visualwheel.position = pos;
             FR.visualwheel.rotation = rot;
+        }
+
+        public void AddForceOnPlaneWheel(Single force)
+        {
         }
     }
 }

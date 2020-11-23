@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,6 +33,12 @@ namespace zxVehicle.plane
 
         #endregion
 
+        #region 螺旋桨
+
+        public Propeller propeller;
+
+        #endregion
+
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody>();
@@ -39,14 +46,32 @@ namespace zxVehicle.plane
             if (null != centerOfMass) {
                 _rigidbody.centerOfMass = centerOfMass.transform.position;
             }
+            
+            // 初始化螺旋桨
+            if (null != propeller) {
+                propeller.plane = this;
+            }
         }
         
         private void FixedUpdate()
         {
-            _inputVert = Input.GetAxis("Vertical");
+            DealWithInput();
+            PlaneUpdate();
+        }
+
+        private void DealWithInput()
+        {
+            _inputVert       = Input.GetAxis("Vertical");
             _inputHorizontal = Input.GetAxis("Horizontal");
+            
             wheelManager.Run(_inputHorizontal, _inputVert);        // 轮子
-            planeWingManager.Run(_inputHorizontal);    // 机翼
+            planeWingManager.Run(_inputHorizontal);                // 机翼
+            propeller.ControlPropellerRotationSpeed(_inputVert);      // 前螺旋桨
+        }
+
+        private void PlaneUpdate()
+        {
+            propeller.PropellerUpdate();
         }
     }
 }

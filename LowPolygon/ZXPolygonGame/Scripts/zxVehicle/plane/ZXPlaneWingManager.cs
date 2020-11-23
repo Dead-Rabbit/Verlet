@@ -97,16 +97,14 @@ namespace zxVehicle.plane
             #region 飞行效果
 
             // _planeRigidbody.AddForce(new Vector3(0, _planeRigidbody.mass * 9.81f, 0));
-            // SimulatePlaneFly();
+            SimulatePlaneFly();
             
             #endregion
         }
 
         private void SimulatePlaneFly()
         {
-            if (_planeRigidbody.velocity.magnitude > flyMinSpeed) {
-                _plane.transform.forward = new Vector3(0, 0, 1);
-            }
+            
         }
 
         private void OnDrawGizmos()

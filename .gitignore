@@ -3,6 +3,8 @@
 ./*.csproj
 ECSStudio.sln
 
+*.meta
+
 ./obj
 
 # This .gitignore file should be placed at the root of your Unity project directory

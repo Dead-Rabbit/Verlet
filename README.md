@@ -1,4 +1,4 @@
 ###  韦尔莱积分
 
-![verlet](.\readmeimg\verlet.png)
+![verlet](readmeimg\verlet.png)
 
